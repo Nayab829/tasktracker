@@ -35,7 +35,7 @@ function EmptyState({ hasFilters, onAddTask }) {
     );
 }
 
-export default function Dashboard({ tasks, onAdd, onEdit, onDelete }) {
+export default function Dashboard({ tasks = [], onAdd, onEdit, onDelete }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -80,7 +80,7 @@ export default function Dashboard({ tasks, onAdd, onEdit, onDelete }) {
     function closeModal() { setModalOpen(false); setEditingTask(null); }
 
     function handleFormSubmit(formData) {
-        editingTask?.id ? onEdit({ ...editingTask, ...formData }) : onAdd(formData);
+        editingTask?._id ? onEdit({ ...editingTask, ...formData }) : onAdd(formData);
         closeModal();
     }
 
@@ -109,7 +109,7 @@ export default function Dashboard({ tasks, onAdd, onEdit, onDelete }) {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                             {visibleTasks.map((task) => (
-                                <TaskCard key={task.id} task={task} onEdit={openEditModal} onDelete={onDelete} />
+                                <TaskCard key={task._id} task={task} onEdit={openEditModal} onDelete={onDelete} />
                             ))}
                         </div>
                     )}

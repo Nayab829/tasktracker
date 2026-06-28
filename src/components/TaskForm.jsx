@@ -21,15 +21,30 @@ const inputError = "border-high focus:border-high focus:ring-high";
 const labelBase = "block text-sm font-medium text-text-secondary mb-1.5";
 const selectBase = "w-full appearance-none bg-surface-2 border border-border text-text-primary text-sm rounded-lg px-3 py-2.5 pr-9 transition-colors duration-150 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent cursor-pointer";
 
+// Converts any date string (ISO or YYYY-MM-DD) to the YYYY-MM-DD format
+// required by <input type="date">
+function toDateInputValue(dateStr) {
+    if (!dateStr) return '';
+    return new Date(dateStr).toISOString().slice(0, 10);
+}
+
 export default function TaskForm({ initialData, onSubmit, onCancel }) {
     const [fields, setFields] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
 
-    const isEditing = Boolean(initialData?.id);
+    const isEditing = Boolean(initialData?._id);
 
     useEffect(() => {
-        setFields(initialData ? { ...EMPTY_FORM, ...initialData } : EMPTY_FORM);
+        if (initialData) {
+            setFields({
+                ...EMPTY_FORM,
+                ...initialData,
+                dueDate: toDateInputValue(initialData.dueDate),
+            });
+        } else {
+            setFields(EMPTY_FORM);
+        }
         setErrors({});
         setTouched({});
     }, [initialData]);
@@ -163,8 +178,8 @@ export default function TaskForm({ initialData, onSubmit, onCancel }) {
                     disabled={submitDisabled}
                     aria-disabled={submitDisabled}
                     className={`flex-1 text-sm font-medium py-2.5 rounded-lg transition-colors duration-150 ${submitDisabled
-                            ? 'bg-accent/40 text-white/40 cursor-not-allowed'
-                            : 'bg-accent hover:bg-accent-hover text-white cursor-pointer'
+                        ? 'bg-accent/40 text-white/40 cursor-not-allowed'
+                        : 'bg-accent hover:bg-accent-hover text-white cursor-pointer'
                         }`}
                 >
                     {isEditing ? 'Save Changes' : 'Add Task'}

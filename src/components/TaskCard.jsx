@@ -14,14 +14,19 @@ const PRIORITY_CONFIG = {
 
 function formatDate(dateStr) {
     if (!dateStr) return '—';
-    return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
+    // works with both "2026-07-01" and "2026-07-01T00:00:00.000Z"
+    return new Date(dateStr).toLocaleDateString('en-US', {
         month: 'short', day: 'numeric', year: 'numeric',
+        timeZone: 'UTC',
     });
 }
 
 function isOverdue(dateStr, status) {
     if (!dateStr || status === 'Completed') return false;
-    return new Date(dateStr + 'T00:00:00') < new Date(new Date().toDateString());
+    const due = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return due < today;
 }
 
 export default function TaskCard({ task, onEdit, onDelete }) {
@@ -46,7 +51,7 @@ export default function TaskCard({ task, onEdit, onDelete }) {
             </div>
 
             {/* Title */}
-            <h3 className={`text-text-primary font-semibold leading-snug ${task.status === 'Completed' ? 'line-through opacity-60' : ''}`}>
+            <h3 className={`text-text-primary font-semibold leading-snug `}>
                 {task.title}
             </h3>
 
@@ -74,7 +79,7 @@ export default function TaskCard({ task, onEdit, onDelete }) {
                     Edit
                 </button>
                 <button
-                    onClick={() => onDelete(task.id)}
+                    onClick={() => onDelete(task._id)}
                     aria-label={`Delete task: ${task.title}`}
                     className="flex items-center gap-1.5 flex-1 justify-center text-sm text-text-secondary hover:text-high hover:bg-[rgba(239,68,68,0.08)] py-1.5 rounded-lg transition-colors duration-150"
                 >
