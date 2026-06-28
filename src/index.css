@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-2: #22263a;
+  --color-border: #2e3350;
+  --color-border-hover: #4a5080;
+
+  --color-text-primary: #e8eaf0;
+  --color-text-secondary: #8b92b3;
+  --color-text-muted: #555e80;
+
+  --color-accent: #6c63ff;
+  --color-accent-hover: #5a52e0;
+
+  --color-pending: #f59e0b;
+  --color-inprogress: #3b82f6;
+  --color-completed: #10b981;
+
+  --color-low: #64748b;
+  --color-medium: #f97316;
+  --color-high: #ef4444;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/*
+  Do NOT add a manual "*, *::before, *::after" reset here.
+  Tailwind v4's Preflight (included in @import "tailwindcss") already
+  resets box-sizing, margin, padding, and borders. Adding a duplicate
+  universal reset AFTER Preflight gives it higher cascade priority than
+  utility classes, which causes utilities like p-*, gap-*, border to be
+  overridden — requiring "!" (important) to win. Removing it fixes that.
+*/
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
